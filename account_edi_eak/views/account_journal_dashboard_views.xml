@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_journal_dashboard_kanban_view_inherit_account_edi_eak" model="ir.ui.view">
+        <field name="name">account.journal.dashboard.kanban.inherit.account.edi.eak</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//t[@id='account.JournalBodySalePurchase']/div//a[@name='action_create_new']" position="before">
+                    <button type="object" name="process_eak_vendor_bill" class="btn btn-primary d-block" groups="account.group_account_invoice" context="{'sticky_notifications': True}">
+                        <span>Fetch Bill eAK</span>
+                    </button>
+                </xpath>
+            </data>
+        </field>
+    </record>
+</odoo>

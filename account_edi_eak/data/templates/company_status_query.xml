@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <template id="company_status_code_import">
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:erp="http://e-arvetekeskus.eu/erp">
+			<soapenv:Header/>
+			<soapenv:Body>
+				<erp:CompanyStatusRequest t-att-authPhrase="vals.get('authPhrase')">
+					<t t-foreach="vals.get('regNumbers')" t-as="regNumber">
+                        <erp:RegNumber><t t-out="regNumber"/></erp:RegNumber>
+                    </t>
+				</erp:CompanyStatusRequest>
+			</soapenv:Body>
+		</soapenv:Envelope>
+	</template>
+</data>

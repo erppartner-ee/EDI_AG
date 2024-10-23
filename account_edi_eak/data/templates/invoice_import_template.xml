@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <template id="account_invoice_edi_eak_import">
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:erp="http://e-arvetekeskus.eu/erp">
+			<soapenv:Header/>
+			<soapenv:Body>
+				<erp:BuyInvoiceExportRequest t-att-since="vals.get('from_date')" t-att-authPhrase="vals.get('authPhrase')">
+					<erp:state>RECEIVED</erp:state>
+					<erp:state>VERIFIED</erp:state>
+					<erp:state>FORPAY</erp:state>
+					<erp:state>BEING_VERIFIED</erp:state>
+					<erp:state>DECLINED</erp:state>
+					<erp:state>PAID</erp:state>
+					<erp:state>RETURNED_TO_SENDER</erp:state>
+				</erp:BuyInvoiceExportRequest>
+			</soapenv:Body>
+		</soapenv:Envelope>
+	</template>
+</data>

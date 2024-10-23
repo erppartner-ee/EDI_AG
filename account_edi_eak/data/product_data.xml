@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="unmatched_product_account_edi_eak" model="product.product">
+        <field name="name">Unmatched Product</field>
+        <field name="standard_price">0</field>
+        <field name="list_price">0</field>
+        <field name="detailed_type">service</field>
+    </record>
+
+</odoo>

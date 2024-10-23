@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_view_form_inherit_account_edi_eak" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.account.account.edi.eak</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="40"/>
+            <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//app[@name='account']" position="inside">
+                    <block title="EDI eAK Integration" id="edi_eak_integration">
+                        <setting id="edi_eak_integration_eak_auth" company_dependent="1" string="eAk server">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="eak_url" string="URL" class="col-lg-3"/>
+                                    <field name="eak_url"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="eak_auth" string="Auth Key" class="col-lg-3"/>
+                                    <field name="eak_auth"/>
+                                </div>
+                                <div class="row mt16">
+                                    <label for="eak_bank_id" string="Bank" class="col-lg-3"/>
+                                    <field name="eak_bank_id"/>
+                                </div>
+                            </div>
+                        </setting>
+                        <setting id="edi_eak_integration_eak_bill_export_date" company_dependent="1">
+                            <field name="eak_bill_export_date" />
+                        </setting>
+                    </block>                    
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

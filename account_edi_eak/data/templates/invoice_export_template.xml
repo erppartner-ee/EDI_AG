@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <template id="account_invoice_edi_eak_export">
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:erp="http://e-arvetekeskus.eu/erp">
+			<soapenv:Header />
+			<soapenv:Body>
+			<erp:EInvoiceRequest t-att-authPhrase="vals.get('authPhrase')">
+				<E_Invoice xsi:noNamespaceSchemaLocation="e-invoice_ver1.2.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+					<t t-set="header" t-value="vals.get('Header')"/>
+					<Header>
+						<Date t-out="header.get('Date')" />
+						<FileId t-out="header.get('FileId')" />
+						<Version t-out="header.get('Version')" />	
+					</Header>
+					<t t-set="invoice" t-value="vals.get('Invoice')"/>
+					<Invoice t-att-sellerRegnumber="invoice.get('sellerRegnumber')" t-att-invoiceId="invoice.get('invoiceId')" t-att-regNumber="invoice.get('regNumber')">
+						<t t-set="invoiceparties" t-value="vals.get('InvoiceParties')" />
+						<InvoiceParties>
+							<SellerParty>
+								<Name t-out="invoiceparties.get('SellerParty_Name')" />
+								<RegNumber t-out="invoiceparties.get('RegNumber')" />
+								<Extension t-att-extensionId="invoiceparties.get('SellerParty_extensionId')">
+									<InformationContent t-out="invoiceparties.get('SellerParty_InformationContent')" />
+								</Extension>
+							</SellerParty>
+							<BuyerParty>
+								<Name t-out="invoiceparties.get('BuyerParty_Name')" />
+								<RegNumber t-out="invoiceparties.get('BuyerParty_RegNumber')" />
+								<Extension t-att-extensionId="invoiceparties.get('BuyerParty_extensionId')">
+									<InformationContent t-out="invoiceparties.get('BuyerParty_InformationContent')" />
+								</Extension>
+							</BuyerParty>
+						</InvoiceParties>
+						<t t-set="invoiceinformation" t-value="vals.get('InvoiceInformation')" />
+						<InvoiceInformation>
+							<Type t-att-type="invoiceinformation.get('Type')"/>
+							<DocumentName t-out="invoiceinformation.get('DocumentName')" />
+							<InvoiceNumber t-out="invoiceinformation.get('InvoiceNumber')" />
+							<InvoiceDate t-out="invoiceinformation.get('InvoiceDate')" />
+							<Extension extensionId="eakChannel">
+								<InformationContent>PORTAL</InformationContent>
+							</Extension>
+							<Extension extensionId="eakStatusAfterImport">
+								<InformationContent>SENT</InformationContent>
+							</Extension>
+						</InvoiceInformation>
+						<InvoiceSumGroup>
+							<InvoiceSum t-out="vals.get('InvoiceSumGroup_InvoiceSum')" />
+							<Rounding t-out="vals.get('InvoiceSumGroup_Rounding')" />
+							<TotalVATSum t-out="vals.get('InvoiceSumGroup_TotalVATSum')" />
+							<TotalSum t-out="vals.get('InvoiceSumGroup_TotalSum')" />
+							<TotalToPay t-out="vals.get('InvoiceSumGroup_TotalToPay')" />
+						</InvoiceSumGroup>
+						<t t-set="invoice_lines" t-value="vals.get('invoice_lines')" />
+						<t t-if="invoice_lines">
+							<InvoiceItem>
+								<t t-foreach="invoice_lines" t-as="line">
+									<InvoiceItemGroup>
+										<ItemEntry>
+											<Description t-out="line.get('ItemEntry_Description')" />
+											<ItemDetailInfo>
+												<ItemUnit t-out="line.get('ItemDetailInfo_ItemUnit')" />
+												<ItemAmount t-out="line.get('ItemDetailInfo_ItemAmount')" />
+												<ItemPrice t-out="line.get('ItemDetailInfo_ItemPrice')"/>
+											</ItemDetailInfo>
+											<ItemSum t-out="line.get('ItemSum')" />
+											<t t-if="line.get('Addition_AddRate', False)">
+												<Addition addCode="DSC">
+													<AddContent t-out="line.get('Addition_AddContent')" />
+													<AddRate t-out="line.get('Addition_AddRate')" />
+													<AddSum t-out="line.get('Addition_AddSum')" />
+												</Addition>
+											</t>
+											<t t-if="line.get('VAT_VATRate', False)">
+												<VAT vatId="TAX">
+													<VATRate t-out="line.get('VAT_VATRate')" />
+													<VATSum t-out="line.get('VAT_VATSum')" />
+												</VAT>
+											</t>
+										</ItemEntry>
+									</InvoiceItemGroup>
+								</t>
+							</InvoiceItem>
+						</t>
+						<t t-set="attachmentfile" t-value="vals.get('AttachmentFile')" />
+						<AttachmentFile>
+							<FileName t-out="attachmentfile.get('FileName')" />
+							<FileBase64 t-out="attachmentfile.get('FileBase64')" />
+						</AttachmentFile>
+						<t t-set="paymentinfo" t-value="vals.get('PaymentInfo')" />
+						<PaymentInfo>
+							<Currency t-out="paymentinfo.get('Currency')" />
+							<PaymentDescription t-out="paymentinfo.get('PaymentDescription')" />
+							<Payable t-out="paymentinfo.get('Payable')" />
+							<PayDueDate t-out="paymentinfo.get('PayDueDate')" />
+							<PaymentTotalSum t-out="paymentinfo.get('PaymentTotalSum')" />
+							<PayerName t-out="paymentinfo.get('PayerName')" />
+							<PaymentId t-out="paymentinfo.get('PaymentId')" />
+							<PayToAccount t-out="paymentinfo.get('PayToAccount')" />
+							<PayToName t-out="paymentinfo.get('PayToName')" />
+						</PaymentInfo>
+					</Invoice>
+					<t t-set="footer" t-value="vals.get('Footer')" />
+					<Footer>
+						<TotalNumberInvoices t-out="footer.get('TotalNumberInvoices')" />
+						<TotalAmount t-out="footer.get('TotalAmount')" />
+					</Footer>
+				</E_Invoice>
+			</erp:EInvoiceRequest>
+			</soapenv:Body>
+		</soapenv:Envelope>
+	</template>
+</data>
