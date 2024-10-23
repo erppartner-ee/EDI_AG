@@ -29,6 +29,7 @@ class TestSyncEakPartners(TransactionCase):
             <SOAP-ENV:Body>
                 <erp:CompanyStatusResponse xmlns:erp="http://e-arvetekeskus.eu/erp">
                     <erp:CompanyActive regNumber="123456">YES</erp:CompanyActive>
+                    <erp:CompanyActive regNumber="789101">YES</erp:CompanyActive>
                 </erp:CompanyStatusResponse>
             </SOAP-ENV:Body>
         </SOAP-ENV:Envelope>
@@ -44,6 +45,6 @@ class TestSyncEakPartners(TransactionCase):
         partner_2 = self.env['res.partner'].search([('company_registry', '=', '789101')])
         
         self.assertEqual(partner_1.is_edi_eak, True)
-        self.assertEqual(partner_2.is_edi_eak, False) 
+        self.assertEqual(partner_2.is_edi_eak, True) 
 
         self.assertEqual(mock_get_client_status.call_count, 1)  # Modify based on the number of batches

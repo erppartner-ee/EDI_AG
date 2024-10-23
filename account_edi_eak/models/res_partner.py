@@ -46,7 +46,7 @@ class ResPartner(models.Model):
         regNumbers = partners.mapped('company_registry')
 
         # Split regNumbers into batches of 100
-        batch_size = 100
+        batch_size = 90
         regNumber_batches = [regNumbers[i:i + batch_size] for i in range(0, len(regNumbers), batch_size)]
 
         edi_contents=[]
@@ -55,8 +55,8 @@ class ResPartner(models.Model):
                     'authPhrase': company.eak_auth,
                     'regNumbers': batch
                 }
-        edi_content = self.env['ir.qweb']._render('account_edi_eak.company_status_code_import',{'vals': vals})
-        edi_contents.append(edi_content)
+            edi_content = self.env['ir.qweb']._render('account_edi_eak.company_status_code_import',{'vals': vals})
+            edi_contents.append(edi_content)
         return edi_contents, error
 
     def _process_to_update_partners(self, row):
