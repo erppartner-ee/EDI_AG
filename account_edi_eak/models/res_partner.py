@@ -22,27 +22,42 @@ class ResPartner(models.Model):
         self.env['ir.logging'].sudo().create(logger)
 
     def _process_to_update_edi_eak_value(self, company):
-        edi_content, error = self._get_partner_edi_content(company)
-        if not error:
-            eAk_obj = EstonianEInvoice(company.eak_url)
+        edi_contents, error = self._get_partner_edi_content(company)
+        if error:
+            return {}, error
+        
+        eAk_obj = EstonianEInvoice(company.eak_url)
+        full_response = {}
+
+        for edi_content in edi_contents:
             eAk_response = eAk_obj.getClientStatus(edi_content)
             if eAk_response.get('fault_string'):
                 error = company.name + "\n"+ eAk_response.get('fault_string')
                 return eAk_response, error
-            error = self._process_to_update_partners(eAk_response.get('row'))
-        return eAk_response, error
+            
+        self._process_to_update_partners(eAk_response.get('row'))
+        full_response.update(eAk_response)
+        return full_response, error
 
     def _get_partner_edi_content(self, company):
         domain = [('company_registry', '!=', ''), ('is_company','=', True)]
         error = ""
         partners = self.search(domain)
         regNumbers = partners.mapped('company_registry')
-        vals = {
-                'authPhrase': company.eak_auth,
-                'regNumbers': regNumbers
-            }
+
+        # Split regNumbers into batches of 100
+        batch_size = 100
+        regNumber_batches = [regNumbers[i:i + batch_size] for i in range(0, len(regNumbers), batch_size)]
+
+        edi_contents=[]
+        for batch in regNumber_batches:
+            vals = {
+                    'authPhrase': company.eak_auth,
+                    'regNumbers': batch
+                }
         edi_content = self.env['ir.qweb']._render('account_edi_eak.company_status_code_import',{'vals': vals})
-        return edi_content, error
+        edi_contents.append(edi_content)
+        return edi_contents, error
 
     def _process_to_update_partners(self, row):
         edi_response = etree.XML(row)
