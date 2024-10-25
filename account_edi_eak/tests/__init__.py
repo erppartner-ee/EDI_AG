@@ -1,1 +1,0 @@
-from . import test_sync_eak_partners
