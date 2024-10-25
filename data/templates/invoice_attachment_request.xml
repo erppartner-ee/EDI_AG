@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+    <template id="invoice_attachment_request_eak_import">
+		<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:erp="http://e-arvetekeskus.eu/erp">
+			<soapenv:Header/>
+			<soapenv:Body>
+				<erp:InvoiceAttachmentRequest t-att-authPhrase="vals.get('authPhrase')" onlyInvoice="YES" startIndex="1">
+					<t t-foreach="vals.get('invoiceIds')" t-as="invoiceId">
+                        <erp:invoiceId><t t-out="invoiceId"/></erp:invoiceId>
+                    </t>
+				</erp:InvoiceAttachmentRequest>
+			</soapenv:Body>
+		</soapenv:Envelope>
+	</template>
+</data>
